@@ -1,5 +1,5 @@
 from machine import Pin, PWM
-from time import ticks_ms, ticks_diff
+from time import ticks_ms, ticks_diff, sleep_ms
 
 # assuming LEDs: red = GPIO 7, blue = GPIO 8, green = GPIO 9
 red = PWM(Pin(7), freq=1000, duty_u16=0)
@@ -33,5 +33,6 @@ if __name__ == "__main__":
             if elapsed >= 3000:
                 break
             pulse(red, elapsed)
+            sleep_ms(10)
     finally:
         all_off()
