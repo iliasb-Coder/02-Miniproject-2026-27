@@ -4,10 +4,9 @@ from time import sleep_ms
 coils = [Pin(pin, Pin.OUT) for pin in (1, 2, 3, 4)]
 
 for coil in coils:
-    coil.off()
-
+    coil.on()
+                                                                                                       
 phase = 3
-
 
 def move(steps, direction=1):
     global phase
@@ -16,14 +15,20 @@ def move(steps, direction=1):
         phase = (phase + direction) % 4
 
         for i, coil in enumerate(coils):
-            coil.value(i == phase)
+            coil.value(i != phase)
 
         sleep_ms(4)
 
     for coil in coils:
-        coil.off()
+        coil.on()
 
 
+print("Forward")
 move(200, 1)
+
 sleep_ms(1000)
+
+print("Backward")
 move(200, -1)
+
+print("Done")
