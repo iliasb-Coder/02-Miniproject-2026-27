@@ -46,20 +46,6 @@ def poll():
 
 
 
-def attach_irq(on_button1=None, on_button2=None):
-    """
-    Attach debounced interrupt handlers. Each callback is called
-    with no arguments when its button is pressed.
-
-        def handle_preset():
-            print("button 1 pressed")
-
-        def handle_start_stop():
-            print("button 2 pressed")
-
-        attach_irq(handle_preset, handle_start_stop)
-    """
-
     def _irq1(pin):
         now = ticks_ms()
         if _debounced("btn1", now) and on_button1:
