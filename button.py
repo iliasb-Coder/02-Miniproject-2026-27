@@ -7,7 +7,6 @@ BUTTON2_PIN = 6
 btn1 = Pin(BUTTON1_PIN, Pin.IN, Pin.PULL_UP)
 btn2 = Pin(BUTTON2_PIN, Pin.IN, Pin.PULL_UP)
 
-
 DEBOUNCE_MS = 200 
 
 # last accepted press time for each button
