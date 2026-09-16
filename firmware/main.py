@@ -5,12 +5,23 @@ import led
 
 from time import ticks_ms, ticks_diff, sleep_ms
 
-STEPS_FOR_30_MIN = 600
+STEPS_PER_REV = 2048
+SECONDS_PER_REV = 30
 
 start_time = 0
 total_time_ms = 0
 start_position = 0
 last_position = 0
+
+
+def return_to_origin():
+    global last_position
+
+    if last_position > 0:
+        stepper.move(last_position, -1)
+
+    last_position = 0
+
 
 while True:
 
@@ -19,27 +30,29 @@ while True:
     # Cycle preset
     if button1 and not timer_logic.running:
         selected = timer_logic.next_preset()
-        print("Preset:", selected, "minutes")
+        print("Preset:", selected, "seconds")
         led.turn_on(led.green)
 
     # Start timer
     if button2 and not timer_logic.running:
+
+        return_to_origin()
+
         selected = timer_logic.current_preset()
 
-        timer_logic.start_timer()
-
-        total_time_ms = selected * 60 * 1000
-        start_time = ticks_ms()
+        total_time_ms = selected * 1000
 
         start_position = int(
-            STEPS_FOR_30_MIN * selected / 30
+            STEPS_PER_REV * selected / SECONDS_PER_REV
         )
 
+        stepper.move(start_position, 1)
         last_position = start_position
 
-        stepper.move(start_position, 1)
+        timer_logic.start_timer()
+        start_time = ticks_ms()
 
-        print("Timer started")
+        print("Timer started:", selected, "seconds")
 
     if timer_logic.running:
 
@@ -62,10 +75,14 @@ while True:
             stepper.move(steps_to_move, -1)
             last_position = target_position
 
-        # Timer finished
         if remaining == 0:
+
+            return_to_origin()
+
             timer_logic.stop_timer()
+
             led.turn_on(led.red)
+
             print("Time is up!")
 
     sleep_ms(10)

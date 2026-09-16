@@ -21,14 +21,3 @@ def move(steps, direction=1):
 
     for coil in coils:
         coil.on()
-
-
-print("Forward")
-move(200, 1)
-
-sleep_ms(1000)
-
-print("Backward")
-move(200, -1)
-
-print("Done")
