@@ -15,7 +15,7 @@ _last_press = {"btn1": 0, "btn2": 0}
 # last raw pin state, used to detect a falling edge (press) in poll()
 _last_state = {"btn1": 1, "btn2": 1}
 
-
+# checks if enough time has passed
 def _debounced(name, now):
     
     if ticks_diff(now, _last_press[name]) >= DEBOUNCE_MS:
@@ -24,7 +24,7 @@ def _debounced(name, now):
     return False
 
 
-
+# Read current pin val & compare to previous
 def poll():
     
     now = ticks_ms()
@@ -61,15 +61,3 @@ def poll():
     btn2.irq(trigger=Pin.IRQ_FALLING, handler=_irq2)
 
 
-
-if __name__ == "__main__":
-    from time import sleep_ms
-
-    print("Press either button (Ctrl-C to stop)...")
-    while True:
-        p1, p2 = poll()
-        if p1:
-            print("Button 1 pressed")
-        if p2:
-            print("Button 2 pressed")
-        sleep_ms(10)
